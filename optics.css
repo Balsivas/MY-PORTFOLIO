@@ -1,0 +1,38 @@
+/* Change from the establishing image to scalable architecture before pixelation. */
+.arrival{background:#040a11;perspective:1400px}
+.flight-world{animation:optical-approach 16s cubic-bezier(.38,.04,.53,.98) both;transform-origin:78% 64%;backface-visibility:hidden}
+.exterior{background-size:200% auto;background-position:0 50%;filter:saturate(.88) contrast(1.06);image-rendering:auto}
+.city-bloom{position:absolute;inset:0;background:radial-gradient(ellipse at 52% 81%,#eab36313,transparent 23%),radial-gradient(ellipse at 76% 62%,#b2e8ed12,transparent 12%);mix-blend-mode:screen;pointer-events:none}
+.aerial-shade{background:linear-gradient(90deg,#03101c55,transparent 55%),linear-gradient(0deg,#02070e44,transparent 35%)}
+.cloud-volume{background:url('assets/cloud-depth.svg') center / 100% 100% no-repeat;filter:none;width:150%;height:95%;left:-25%;will-change:transform,opacity;mix-blend-mode:screen}
+.cloud-near{top:7%;animation:near-cloud-depth 16s cubic-bezier(.3,.1,.5,1) both}
+.cloud-far{top:-8%;filter:blur(3px);animation:far-cloud-depth 16s ease-in-out both}
+.glass-entry{background:url('assets/tower-facade.svg') 50% 50% / 100% 100% no-repeat;inset:0;border:0;box-shadow:inset 0 0 100px #02080b80;animation:architectural-approach 16s cubic-bezier(.4,.08,.55,1) both;transform-origin:58.333% 58.333%;backface-visibility:hidden;will-change:transform,opacity}
+.glass-reflection{opacity:.8;background:linear-gradient(116deg,transparent 32%,#9fced20d 39%,#dfedf31c 41%,transparent 44%),linear-gradient(13deg,transparent 40%,#acc9d413 47%,transparent 55%);mix-blend-mode:screen}
+.glass-entry:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 43% 22%,#c7e0e41a 0 .09%,transparent .18%),radial-gradient(ellipse at 70% 65%,#d9e1e119 0 .11%,transparent .23%),radial-gradient(ellipse at 22% 84%,#d9e1e114 0 .08%,transparent .18%),linear-gradient(90deg,transparent 49.8%,#b6ced108 50%,transparent 50.2%);opacity:.65}
+.window-interior{left:50.25%;top:50.5%;width:16.1%;height:15.4%;border:1px solid #9eafb45c;box-shadow:0 0 8px #f1ce8430,inset 0 0 12px #000b;filter:brightness(.72) saturate(.75)}
+.window-interior:after{content:'';position:absolute;inset:0;background:linear-gradient(117deg,transparent 15%,#afdcdf1a 37%,transparent 65%);box-shadow:inset 2px 0 0 #0009,inset -2px 0 0 #c6dde130}
+.window-light{background:linear-gradient(120deg,#f4c78418,transparent 70%);border-top:1px solid #e9c27a50}
+.lens-glint{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 63% 48%,#e0f3e34d,transparent 3%),linear-gradient(0deg,transparent 51.8%,#a3d4d523 52%,transparent 52.2%);mix-blend-mode:screen;animation:glass-glint 16s linear both}
+.speed-haze{position:absolute;inset:-5%;z-index:4;pointer-events:none;opacity:0;box-shadow:inset 0 0 85px 25px #2f637129;background:radial-gradient(ellipse at 58% 58%,transparent 35%,#07111c52 90%);animation:edge-velocity 16s ease both}
+.interior-entry{inset:auto;left:50%;top:50%;width:max(100vw,calc((100svh - 150px)*1.5));height:auto;aspect-ratio:1.5;background-size:200% 100%;background-position:100% 50%;animation:matched-room-arrival 16s cubic-bezier(.3,.1,.4,1) both;transform-origin:50% 50%;will-change:transform,opacity}
+.interior-entry:after{background:linear-gradient(90deg,#03091040,transparent 50%),linear-gradient(0deg,#03091033,transparent 40%)}
+.cinema-grain{opacity:.05;background:repeating-linear-gradient(0deg,#a6bac205 0 1px,transparent 1px 4px);box-shadow:inset 0 0 140px #0008}
+.impact-flash{background:#cde4e7;animation-name:soft-contact-flash}
+.impact-rings{border:0;background:radial-gradient(ellipse at 58% 58%,transparent 27%,#bcd8df13 29%,transparent 32%);animation-name:contact-pressure}
+.arrival-caption{text-shadow:0 3px 24px #0008}.arrival-caption p{font-weight:400;line-height:1.13}.arrival-coordinates{opacity:.7;font-size:7px;letter-spacing:1.7px}
+.inside .scene-world{animation:camera-settle 2.5s cubic-bezier(.2,.6,.3,1) both}
+.screen-focused .scene-world{animation:none}
+@keyframes optical-approach{0%{transform:scale(1.025) translate3d(0,-1.5%,0) rotate(.15deg);filter:blur(0)}24%{transform:scale(1.13) translate3d(-.2%,0,0) rotate(0)}42%{transform:scale(1.55) translate3d(-.5%,1%,0)}59%{transform:scale(2.45) translate3d(-.5%,1.5%,0);filter:blur(0)}72%,100%{transform:scale(2.9) translate3d(-.5%,2%,0);filter:blur(1px)}}
+@keyframes architectural-approach{0%,39%{opacity:0;transform:translate3d(16%,-4%,0) scale(.1) perspective(1200px) rotateY(-8deg)}48%{opacity:.55;transform:translate3d(6%,-1%,0) scale(.35) perspective(1200px) rotateY(-5deg)}58%{opacity:1;transform:translate3d(0,0,0) scale(1.05) perspective(1200px) rotateY(-2deg)}68%{opacity:1;transform:scale(3.8)}71.5%{transform:scale(5.8)}72.2%{transform:scale(5.92) translate3d(.22%,-.12%,0) rotate(.12deg)}73%{transform:scale(5.9) translate3d(-.14%,.07%,0) rotate(-.08deg)}74%{transform:scale(6)}78%{opacity:1;transform:scale(7.5)}85%,100%{opacity:0;transform:scale(10.5)}}
+@keyframes near-cloud-depth{0%{opacity:.12;transform:translate3d(3%,-16%,0) scale(.85)}20%{opacity:.55}37%{opacity:.45;transform:translate3d(-7%,8%,0) scale(1.15)}57%{opacity:.16}70%,100%{opacity:0;transform:translate3d(-28%,48%,0) scale(1.9)}}
+@keyframes far-cloud-depth{0%{opacity:.2;transform:translate3d(-5%,-6%,0) scale(.9)}26%{opacity:.3}55%{opacity:.1;transform:translate3d(9%,23%,0) scale(1.3)}75%,100%{opacity:0;transform:translate3d(15%,35%,0) scale(1.5)}}
+@keyframes glass-glint{0%,55%{opacity:0}65%{opacity:.32}70%{opacity:.15}75%{opacity:.45}82%,100%{opacity:0}}
+@keyframes edge-velocity{0%,38%{opacity:0;transform:scale(1)}65%{opacity:.6}74%{opacity:.8;transform:scale(1.03)}86%,100%{opacity:0;transform:scale(1)}}
+@keyframes matched-room-arrival{0%,76%{opacity:0;transform:translate(-50%,-50%) scale(.96)}86%{opacity:1;transform:translate(-50%,-50%) scale(1.018)}100%{opacity:1;transform:translate(-50%,-50%) scale(1.015)}}
+@keyframes soft-contact-flash{0%,71.5%{opacity:0}72%{opacity:.16}73.5%,100%{opacity:0}}
+@keyframes contact-pressure{0%,71%{opacity:0;transform:scale(.95)}72%{opacity:.6;transform:scale(1)}75%,100%{opacity:0;transform:scale(1.2)}}
+@keyframes camera-settle{from{transform:translate(-50%,-50%) scale(1.015)}to{transform:translate(-50%,-50%) scale(1)}}
+@media(max-aspect-ratio:3/2){.exterior{background-size:auto 100%;background-position:0 50%}}
+@media(max-width:700px){.interior-entry{width:100vw}.arrival-coordinates{font-size:6px}.cloud-volume{width:200%;left:-50%}.scene-world{will-change:auto}}
+@media(prefers-reduced-motion:reduce){.inside .scene-world{animation:none}.lens-glint,.speed-haze,.impact-flash,.impact-rings{display:none}}

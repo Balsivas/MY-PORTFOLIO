@@ -1,0 +1,49 @@
+/* Frame-accurate camera transforms replace independently timed CSS zooms. */
+.arrival .flight-world,.arrival .glass-entry,.arrival .interior-entry,.arrival .cloud-volume,.arrival .impact-flash,.arrival .impact-rings,.arrival .lens-glint,.arrival .speed-haze,.arrival .flight-meter i{animation:none!important}
+.arrival{perspective:none;transition:opacity .55s ease-out,visibility .55s;contain:layout paint}
+.flight-world{inset:0;transform-origin:78% 64%;filter:none!important;will-change:transform,opacity}
+.glass-entry{inset:0;width:100%;height:100%;transform-origin:0 0;filter:none;box-shadow:none;will-change:transform,opacity;backface-visibility:hidden}
+.exterior{filter:saturate(.93) contrast(1.04);image-rendering:auto}
+.interior-entry{z-index:4;left:50%;top:50%;inset:auto;width:max(100vw,calc((100svh - 150px)*1.5));aspect-ratio:1.5;background-size:200% 100%;background-position:100% 50%;will-change:transform,opacity,clip-path;filter:none;backface-visibility:hidden}
+.interior-entry:after{background:none}
+.window-interior{filter:none;box-shadow:inset 1px 0 0 #d6e6eb40,inset -2px 0 0 #040b11;image-rendering:auto}
+.window-interior:after{background:linear-gradient(117deg,transparent 25%,#b0d6da0d 43%,transparent 63%);box-shadow:inset 0 0 5px #03090c55}
+.glass-reflection{will-change:opacity}.glass-entry:before{opacity:.32}
+.cinema-grain{background:none;opacity:.025;box-shadow:inset 0 0 100px #0006}
+.speed-haze{box-shadow:inset 0 0 50px #0b26371c}
+.arrival .arrival-caption{animation:none;transition:none;will-change:opacity}
+.arrival.impact .arrival-caption{opacity:inherit}
+.impact-flash,.impact-rings{z-index:6}.lens-glint{z-index:5}
+.scene-world{background-color:#050b10;image-rendering:auto;backface-visibility:hidden}
+.inside .scene-world{animation:none;transform:translate(-50%,-50%)}
+.monitor{border-color:#172c31;box-shadow:inset 0 1px 0 #b7d7d41a,0 3px 9px #0008}
+.monitor.active{box-shadow:0 0 15px #85dfbe38,inset 0 0 10px #80cdbb08}
+.monitor:before{background:linear-gradient(128deg,#d9f4ed05,transparent 50%)}
+.screen-content{transition:opacity .4s;filter:none}.binary{text-shadow:0 0 5px #75c8a52b}
+.screen-focused .monitor.focused{transition:box-shadow .35s,border-color .35s;animation:monitor-approach .5s cubic-bezier(.2,.75,.3,1) both}
+@keyframes monitor-approach{from{opacity:.3;transform:translate(-50%,-50%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@media(max-width:700px){.interior-entry{width:100vw}}
+@media(prefers-reduced-motion:reduce){.arrival{display:none}.screen-focused .monitor.focused{animation:none}}
+
+/* Cut a real opening in the near plane. The live workstation occupies the far plane. */
+#arrival { background:transparent; }
+#arrival .interior-entry { display:none; }
+#arrival .glass-entry { background:none; }
+#arrival .glass-entry::before {
+  content:""; position:absolute; inset:0; opacity:1;
+  background:url('assets/tower-facade.svg') center / 100% 100% no-repeat;
+  clip-path:polygon(evenodd, 0 0,100% 0,100% 100%,0 100%,0 0,
+    50.25% 50.5%,50.25% 65.9%,66.35% 65.9%,66.35% 50.5%,50.25% 50.5%,0 0);
+}
+#arrival .glass-entry::after {
+  content:""; position:absolute; left:50.25%; top:50.5%; width:16.1%; height:15.4%;
+  box-sizing:border-box; pointer-events:none;
+  border:.16vw solid #233542; border-top-color:#101c24; border-right-color:#52636a;
+  box-shadow:inset .12vw -.12vw .08vw #9daeb277,0 .15vw .12vw #02070bb3;
+}
+#arrival .window-interior {
+  background:linear-gradient(118deg,#283d4aea 3%,#71888a94 41%,#1b303cbd 52%,#142431df);
+}
+@media(max-aspect-ratio:3/2){
+  #arrival .exterior{background-position:calc(78vw - 117svh) center;}
+}

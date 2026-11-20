@@ -1,0 +1,39 @@
+/* A wide establishing shot, a glass facade, and the interior reveal. */
+:root{--green:#bee8dc;--ink:#edece7;--muted:#98a5ac}
+.arrival{--flight:16s}
+.flight-world{animation:city-descent var(--flight) cubic-bezier(.4,.02,.65,1) both;transform-origin:78% 65%;will-change:transform}
+.exterior{background-size:200% 100%;background-position:0 50%;filter:saturate(.85) contrast(1.05)}
+.aerial-shade{background:linear-gradient(90deg,#02081375,transparent 60%),linear-gradient(0deg,#02081365,transparent 50%)}
+.arrival-caption p{font-size:clamp(34px,4.5vw,66px);font-weight:400;max-width:700px}
+.arrival-caption{bottom:14%}.arrival-meta{opacity:.8}
+.arrival-coordinates{color:#e2ded2b0}
+.cloud-volume{animation-duration:var(--flight);opacity:.45;filter:blur(45px)}
+.cloud-far{opacity:.3}.glass-entry{inset:0;border:0;display:block;background:repeating-linear-gradient(0deg,transparent 0 14.7%,#060d15 14.7% 15%,#71848b66 15% 15.2%,transparent 15.2% 16.66%),repeating-linear-gradient(90deg,#152630b0 0 16%,#8098a052 16% 16.2%,#02070d 16.2% 16.66%);box-shadow:inset 0 0 140px #000a;animation:facade-passage var(--flight) cubic-bezier(.5,.05,.65,1) both;transform-origin:58.33% 58.33%;z-index:3;will-change:transform,opacity}
+.glass-entry>i{display:none}.glass-reflection{background:linear-gradient(115deg,transparent 30%,#87c2d418 38%,transparent 44%),linear-gradient(15deg,#8fa3a915,transparent 70%);mix-blend-mode:screen}
+.window-interior{position:absolute;left:50%;top:50%;width:16.66%;height:16.66%;background:url('assets/night-scenes.png') 100% 50% / 200% 100% no-repeat;border:3px solid #13212a;box-shadow:0 0 20px #e8bf5d42,inset 0 0 10px #000}
+.window-light{position:absolute;inset:0;background:linear-gradient(110deg,#edc17b20,transparent 60%);border-top:1px solid #e6c78b88}
+.interior-entry{animation:interior-arrival var(--flight) cubic-bezier(.4,.05,.5,1) both;background-size:200% 100%;background-position:100% 50%;transform-origin:57% 48%}
+.interior-entry:after{background:linear-gradient(90deg,#02070c90,transparent 65%),linear-gradient(0deg,#02070c60,transparent 50%)}
+.flight-meter i{animation-duration:var(--flight);background:#e8d5ac;box-shadow:0 0 10px #dfcba4}
+.cinema-grain{opacity:.09;box-shadow:inset 0 0 180px #0007}
+.room-scene{opacity:.35;filter:blur(7px) saturate(.7);transform:scale(1.05)}
+.atmosphere:after{background:linear-gradient(#050a1180,#050a11e8 70%)}
+.room-heading{padding-bottom:32px}.room-heading h1{font-size:clamp(38px,4vw,60px)}
+.room-view{position:relative;aspect-ratio:16/9;margin:0 0 56px;overflow:hidden;border:1px solid #a0b4b028;border-radius:3px;background:url('assets/night-scenes.png') 100% 50% / 200% 100% no-repeat;box-shadow:0 40px 80px #0008}
+.room-view:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#02070b85,transparent 45%),linear-gradient(0deg,#02070ba8,transparent 30%);box-shadow:inset 0 0 80px #0004}
+.room-light{position:absolute;inset:0;background:radial-gradient(ellipse at 54% 60%,#79d9c417,transparent 45%);animation:screen-light 8s ease-in-out infinite alternate;pointer-events:none}
+.room-view-caption{position:absolute;left:4%;top:8%;z-index:2}.room-view-caption>span{font:8px var(--mono);letter-spacing:3px;color:#d2ba90}.room-view-caption h2{font-size:clamp(24px,3vw,44px);line-height:1.15;font-weight:400;letter-spacing:-1.5px;margin:16px 0}.room-view-caption p{font:9px var(--mono);color:#a1afb3}
+.room-view-meta{position:absolute;bottom:5%;left:4%;right:4%;z-index:2;display:flex;justify-content:space-between;gap:15px;font:8px var(--mono);letter-spacing:1.3px;color:#bac5c5}.room-view-meta i{display:inline-block;width:4px;height:4px;border-radius:50%;background:#b6e5ce;box-shadow:0 0 8px #b6e5ce;margin-left:6px}
+.physical-screens{position:absolute;left:24%;top:40%;width:55.5%;height:12.5%;display:flex;gap:1%;transform:perspective(1000px) rotateX(-2deg);color:#a5eee2;text-shadow:0 0 12px #8be4d7;opacity:.9}
+.physical-screens>span{width:33.33%;display:flex;align-items:center;justify-content:center;flex-direction:column;font:clamp(5px,.75vw,11px) var(--mono);letter-spacing:1px;background:linear-gradient(180deg,#02131045,#021310b0)}.physical-screens small{font:clamp(4px,.45vw,7px) var(--mono);margin-top:8px;letter-spacing:1px;opacity:.65}
+.workstation{transform:none;background:linear-gradient(130deg,#192027d9,#070b10ed);border-color:#53626555;box-shadow:0 25px 80px #0009}.observer{display:none}
+.monitor{background:linear-gradient(125deg,#132026f5,#090f16fc);border-color:#293138;box-shadow:inset 0 1px 0 #ffffff0a,0 6px 15px #0006}.monitor.active{border-color:#73958b;box-shadow:0 0 45px #b5e4d019}
+.portrait img{filter:saturate(.62) contrast(1.05);object-position:center 25%}.monitor:before{background:linear-gradient(130deg,#d9e3e30a,transparent 42%)}
+body.running .topbar{position:relative}.motion-still .room-light{animation-play-state:paused}
+@keyframes city-descent{0%{transform:scale(1) translate(0,-3%)}26%{transform:scale(1.12) translate(0,0)}48%{transform:scale(1.65) translate(-1%,3%)}69%,100%{transform:scale(4.3) translate(-1%,7%)}}
+@keyframes facade-passage{0%,38%{opacity:0;transform:scale(.035) perspective(1200px) rotateY(-16deg)}49%{opacity:.5;transform:scale(.22) perspective(1200px) rotateY(-10deg)}61%{opacity:1;transform:scale(.85) perspective(1200px) rotateY(-4deg)}77%{opacity:1;transform:scale(6.5) perspective(1200px) rotateY(0)}87%,100%{opacity:0;transform:scale(12)}}
+@keyframes interior-arrival{0%,69%{opacity:0;transform:scale(.95)}81%{opacity:1;transform:scale(1)}100%{opacity:1;transform:scale(1.025)}}
+@keyframes screen-light{from{opacity:.4}to{opacity:1}}
+@media(min-width:1600px){.room-scene,.exterior,.interior-entry{background-size:200% 100%}}
+@media(max-width:600px){.room-view{aspect-ratio:4/3;margin-bottom:32px;background-size:200% 100%}.room-view-caption h2{font-size:23px;letter-spacing:-.7px}.room-view-caption>span{font-size:6px}.room-view-caption p{font-size:7px}.room-view-meta{font-size:5px;letter-spacing:.5px}.physical-screens{top:40%}.physical-screens>span{font-size:5px;letter-spacing:0}.physical-screens small{font-size:3px;letter-spacing:0;margin-top:4px}.arrival-caption p{font-size:38px;letter-spacing:-1.4px}.exterior,.interior-entry{background-size:200% 100%}.exterior{background-position:0 50%}.interior-entry{background-position:100% 50%}.room-scene{background-size:200% 100%}}
+@media(prefers-reduced-motion:reduce){.room-light{animation:none}.room-view{transform:none}}
