@@ -124,57 +124,6 @@ body:not(.inside) :is(.scene-location, .scene-instructions, .session-status, .op
 .monitor-dialog .contact-actions { margin-top: 20px; }
 .monitor-dialog #copy-status { font-size: 13px; }
 
-/* Reflow the wall in narrow or shallow viewports so no monitor falls outside the room. */
-@media (max-width: 900px), (max-aspect-ratio: 1/1), (max-height: 540px), (min-aspect-ratio: 5/2) {
-  .room { overflow: auto; overscroll-behavior: contain; }
-  .scene-world {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    min-height: 100%;
-    padding: clamp(100px, 18vw, 160px) 4% 20px;
-    aspect-ratio: auto;
-    transform: none !important;
-    background-size: max(200%, 780px) auto;
-    background-position: right top;
-  }
-  .scene-location { top: 16px; left: 4%; font-size: 10px; }
-  .scene-location p { font-size: 15px; margin: 5px 0; }
-  .scene-location small { font-size: 10px; }
-  .monitor-grid {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
-    grid-template-rows: auto;
-    gap: 10px;
-    perspective: none;
-  }
-  .monitor-grid .monitor { transform: none; }
-  .monitor-grid .monitor-head, .monitor-grid .monitor-foot { padding: 6px 10px; gap: 6px; }
-  .monitor-grid .monitor-head { font-size: 12px; }
-  .monitor-grid .screen-status, .monitor-grid .monitor-foot { font-size: 9px; }
-  .monitor-grid .focus-screen { width: 40px; height: 32px; font-size: 19px; }
-  .monitor-grid .monitor .screen-content { padding: 12px !important; overflow: visible; }
-  .monitor-grid .eyebrow, .monitor-grid .outline-tag { font-size: 9px; }
-  .monitor-grid h2 { font-size: 21px; }
-  .monitor-grid .skill-row { padding: 4px 0; gap: 7px; }
-  .monitor-grid .skill-row h3 { font-size: 15px; }
-  .monitor-grid .skill-row span, .monitor-grid .portrait > span { font-size: 9px; }
-  .monitor-grid .large-number { font-size: 40px; margin-right: 12px; }
-  .monitor-grid .large-number span { font-size: 10px; }
-  .monitor-grid .screen-content p:not(.eyebrow):not(.full-name),
-  .monitor-grid .full-name { font-size: 14px; }
-  .monitor-grid .small-note, .monitor-grid .action, .monitor-grid .email,
-  .monitor-grid .contact-actions, .monitor-grid .contact-actions button { font-size: 12px; }
-  .monitor-grid .action { margin-block: 8px; padding: 8px 10px; }
-  .monitor-grid .screen-content { gap: 10px; }
-  .monitor-grid .contact-actions { gap: 8px; margin-top: 8px; }
-  .scene-instructions { position: static; padding: 10px 4% 18px; }
-  .scene-vignette, .hacker-foreground, .typing-hands, .operator-caption { display: none; }
-}
 @media (max-width: 460px) {
   .monitor-dialog .monitor-head { flex-wrap: wrap; gap: 6px; }
   .monitor-dialog .monitor-head button { padding-inline: 8px; }
@@ -197,8 +146,37 @@ body:not(.inside) :is(.scene-location, .scene-instructions, .session-status, .op
 .monitor-grid .monitor:not(.active) .binary-curtain { color:#728c85; }
 .scene-location small { display:block; color:#b8e5cc; font:clamp(10px,.9vw,15px)/1.5 var(--mono); }
 .scene-location small::after { content:none; }
-@media(max-width:900px),(max-aspect-ratio:1/1),(max-height:540px),(min-aspect-ratio:5/2) {
-  .scene-world { padding-top:clamp(210px,56vw,390px); background-size:200% auto; }
-  .scene-location { background:#071317d9; padding:8px 10px; }
-}
 
+/* The room photograph and its live screen surfaces share one 3:2 coordinate plane. */
+.scene-world {
+  width: min(162vw, max(100vw, calc((100svh - 150px)*1.5)), max(100vw, calc((100svh - 150px)*3)));
+  aspect-ratio: 3 / 2;
+  background-position: right center;
+  background-size: 200% 100%;
+}
+.monitor-grid {
+  left:22.9%; top:39.3%; width:57.3%; height:30.3%;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:1.4% .55%;
+}
+.monitor-grid .monitor {transform:none; border-width:1px; border-radius:1px;}
+.monitor-grid .monitor-head {font-size:.59cqw; padding:.17cqw .3cqw; gap:.18cqw;}
+.monitor-grid .screen-status {font-size:.43cqw;}
+.monitor-grid .focus-screen {width:1.3cqw;height:1.15cqw;font-size:.85cqw;}
+.monitor-grid .monitor-foot {font-size:.38cqw;padding:.12cqw .3cqw;}
+.monitor-grid .monitor .screen-content {padding:.38cqw!important;gap:.3cqw;}
+.monitor-grid h2 {font-size:1.08cqw;margin:0 0 .18cqw;}
+.monitor-grid .skill-row h3 {font-size:.75cqw;}
+.monitor-grid .skill-row {padding:.1cqw 0;}
+.monitor-grid .eyebrow,.monitor-grid .outline-tag {font-size:.44cqw;}
+.monitor-grid .screen-content p:not(.eyebrow):not(.full-name),.monitor-grid .full-name {font-size:.64cqw;line-height:1.27;margin:.15cqw 0;}
+.monitor-grid .small-note,.monitor-grid .action,.monitor-grid .email,.monitor-grid .contact-actions,.monitor-grid .contact-actions button {font-size:.52cqw;line-height:1.25;}
+.monitor-grid .large-number span {font-size:.5cqw;}
+.monitor-grid .contact-actions {gap:.15cqw;margin-top:.2cqw;}
+.monitor-grid .binary-curtain {font-size:.77cqw;}
+@media(max-aspect-ratio:1/1) {
+  .scene-location {left:22%;top:25%;}
+  .scene-world {width:162vw;}
+  .scene-instructions {bottom:3%;}
+}
