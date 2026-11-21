@@ -11,21 +11,9 @@ let screenSlot = null;
 let elapsed=0,previous=0,paused=false,completed=false,lastPaint=0;
 const queries = ['identity', 'education', 'skills', 'ambitions', 'projects', 'contact'];
 screens.forEach(screen=>{
-  screen.querySelectorAll('.screen-content h2,.screen-content h3,.screen-content p,.screen-content .small-note,.screen-content .outline-tag,.screen-content a,.screen-content .large-number > strong,.screen-content .large-number > span,.screen-content .skill-row>span').forEach(el=>{
-    if(el.querySelector('.decode'))return;
-    if(!el.dataset.text)el.dataset.text=el.textContent.trim();
-    el.classList.add('decode');
-  });
   const curtain=document.createElement('div');curtain.className='binary-curtain';curtain.setAttribute('aria-hidden','true');curtain.textContent='Awaiting operator…';screen.append(curtain);
 });
 function decodeScreen(screen,fraction){
-  screen.querySelectorAll('.decode').forEach(el=>{
-    const text=el.dataset.text,shown=Math.floor(text.length*fraction);
-    el.textContent=[...text].map((char,i)=>char===' '?char:i<shown?char:Math.random()>.5?'1':'0').join('');
-    el.classList.toggle('binary',fraction<1);
-  });
-  screen.style.setProperty('--photo-blur',String((1-fraction)*22)+'px');
-  screen.style.setProperty('--photo-opacity',String(Math.max(0,(fraction-.2)/.8)));
   screen.classList.toggle('decoded',fraction>=.2);
   screen.classList.toggle('revealed',fraction>=1);
   screen.querySelector('.screen-content').toggleAttribute('inert',fraction<1);
@@ -70,7 +58,7 @@ function finish() {
   setFlightActive(false);
   completed = true;
   document.body.classList.remove('is-typing','operator-working','running');
-  document.querySelector('#operator-action').textContent = 'OPERATOR / ARCHIVE RECOVERED';
+
   screens.forEach(screen => {
     decodeScreen(screen,1);
     screen.classList.remove('active');
@@ -78,8 +66,8 @@ function finish() {
   });
   progress.style.width = '100%';
   document.querySelector('#counter').textContent = '06 / 06';
-  narration.textContent = 'Archive decrypted. Explore the six monitors.';
-  document.querySelector('#terminal-log').textContent = '> 6 records recovered / session complete';
+  narration.textContent = 'Session complete';
+  document.querySelector('#terminal-log').textContent = 'All six records are available to explore.';
 }
 function start() {
   closeFocus();
@@ -90,7 +78,7 @@ function start() {
   document.body.classList.remove('is-typing','operator-working','motion-still');
   document.body.classList.add('running');
   arrival.classList.remove('impact');
-  document.querySelector('#operator-action').textContent = 'OPERATOR / CONNECTING';
+
   document.querySelector('#terminal-log').textContent = 'Establishing connection...';
   screens.forEach(screen => {
     screen.classList.remove('active');
@@ -108,7 +96,7 @@ function start() {
 function render(){
   if(elapsed<introDuration){
     const phase=elapsed<4700?0:elapsed<9500?1:elapsed<12500?2:3;
-    const captions=[['01 / DUBAI AFTER DARK','Above the city.<br>One window ahead.'],['02 / BURJ KHALIFA','Closer to the tower.<br>Closer to the story.'],['03 / WINDOW CONTACT','Right up to the glass.'],['04 / INSIDE THE ROOM','Connection established.']];
+    const captions=[['Dubai / After dark','The Night<br><em>Session.</em>'],['Burj Khalifa / Approach','One light<br><em>still on.</em>'],['Burj Khalifa / Office','Through the glass.'],['Private workstation','The search begins.']];
     document.querySelector('#arrival-label').textContent=captions[phase][0];document.querySelector('#arrival-text').innerHTML=captions[phase][1];arrival.classList.toggle('impact',elapsed>11200);
   }else{
     if (!arrival.classList.contains('done')) {
@@ -122,24 +110,41 @@ function render(){
     const typed = command.slice(0,Math.floor(Math.min(1,age/1450)*command.length));
     const monitor = String(index+1).padStart(2,'0');
     document.body.classList.toggle('is-typing',age<1450);
-    document.body.style.setProperty('--operator-turn', ((index%3-1)*3)+'deg');
-    screens.forEach((screen,i)=>{
+        screens.forEach((screen,i)=>{
       const fraction = Math.max(0,Math.min(1,(elapsed-introDuration-i*stepDuration-1750)/1800));
-      decodeScreen(screen,fraction);
+      if (fraction>0 && fraction<1 || screen.classList.contains('revealed') !== (fraction>=1)) decodeScreen(screen,fraction);
       screen.classList.toggle('active',i===index);
       screen.querySelector('.screen-status').textContent = fraction>=1?'DECRYPTED':i===index?'SEARCHING':'STANDBY';
       screen.querySelector('.binary-curtain').textContent = i===index
         ? '$ '+typed+(age<1450?'▏':'\nMatch found · opening record') : 'Awaiting operator…';
     });
-    const activity = age<1450?'Typing query':age<1750?'Searching archive':'Reading '+labels[index];
-    document.querySelector('#operator-action').textContent = activity+' / '+monitor;
-    document.querySelector('#terminal-log').textContent = '$ '+typed+(age<1450?'▏':'  →  Monitor '+monitor);
-    narration.textContent = 'Monitor '+monitor+' · '+activity+' · Siva Syam';
+    const activity = age<1450?'Typing query':age<1750?'Searching archive':'Reading record';
+
+    document.querySelector('#terminal-log').textContent = age<1750 ? '$ '+typed+'_' : activity+' from public archive';
+    narration.textContent = labels[index]+' / Monitor '+monitor;
     document.querySelector('#counter').textContent=String(index+1).padStart(2,'0')+' / 06';
   }
   progress.style.width=String(Math.min(100,elapsed/total*100))+'%';if(elapsed>=total)finish();
 }
-function tick(time){if(!previous)previous=time;const delta=Math.min(time-previous,100);previous=time;if(!paused&&!completed){elapsed+=delta;if(elapsed<introDuration&&window.paintFlight)window.paintFlight(elapsed);if(time-lastPaint>70){render();lastPaint=time;}}requestAnimationFrame(tick);}
+document.addEventListener('visibilitychange',()=>{previous=0;});
+function tick(time) {
+  const delta = previous && !document.hidden ? time - previous : 0;
+  previous = time;
+  if (!paused && !completed) {
+    elapsed += delta;
+    if (elapsed < introDuration) window.paintFlight(elapsed);
+    if (time - lastPaint > 70) {
+      render();
+      lastPaint = time;
+    }
+  }
+  window.drawOperator?.({
+    time, elapsed, flight:introDuration, step:stepDuration, completed,
+    paused:paused || document.hidden || dialog.open || document.body.classList.contains('motion-still'),
+    reduced:reduce.matches
+  });
+  requestAnimationFrame(tick);
+}
 skipButton.addEventListener('click', () => { elapsed = introDuration; render(); pauseButton.focus({preventScroll:true}); });
 document.querySelector('.skip-link').addEventListener('click',()=>{finish();});
 pauseButton.addEventListener('click',()=>{if(completed){const still=document.body.classList.toggle('motion-still');pauseButton.textContent=still?'Resume':'Pause';pauseButton.setAttribute('aria-pressed',String(still));}else setPause(!paused);});
