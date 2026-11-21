@@ -14,6 +14,7 @@
   const haze=stage.querySelector('.speed-haze');
   const meter=stage.querySelector('.flight-meter i');
   const caption=stage.querySelector('.arrival-caption');
+  const coordinates=stage.querySelector('.arrival-coordinates');
   const destination=stage.querySelector('.destination-window');
   let width=innerWidth,height=innerHeight;
   addEventListener('resize',()=>{width=innerWidth;height=innerHeight;},{passive:true});
@@ -54,6 +55,7 @@
     haze.style.opacity=String(Math.sin(Math.PI*segment(t,.42,.90))*.25);
     meter.style.transform=`scaleX(${t})`;
     caption.style.opacity=String(1-segment(t,.57,.69));
+    coordinates.style.opacity=String(.7*(1-segment(t,.48,.60)));
   };
   window.paintFlight(0);
 })();

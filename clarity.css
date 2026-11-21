@@ -20,10 +20,9 @@
 .monitor.active{box-shadow:0 0 15px #85dfbe38,inset 0 0 10px #80cdbb08}
 .monitor:before{background:linear-gradient(128deg,#d9f4ed05,transparent 50%)}
 .screen-content{transition:opacity .4s;filter:none}.binary{text-shadow:0 0 5px #75c8a52b}
-.screen-focused .monitor.focused{transition:box-shadow .35s,border-color .35s;animation:monitor-approach .5s cubic-bezier(.2,.75,.3,1) both}
-@keyframes monitor-approach{from{opacity:.3;transform:translate(-50%,-50%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
 @media(max-width:700px){.interior-entry{width:100vw}}
-@media(prefers-reduced-motion:reduce){.arrival{display:none}.screen-focused .monitor.focused{animation:none}}
+@media(prefers-reduced-motion:reduce){.arrival{display:none}}
 
 /* Cut a real opening in the near plane. The live workstation occupies the far plane. */
 #arrival { background:transparent; }

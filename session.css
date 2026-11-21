@@ -3,3 +3,180 @@
 @keyframes operator-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
 @media(max-width:700px){.destination-window span{font-size:5px}.operator-caption{font-size:4px;gap:3px}.operator-dot{width:2px;height:2px}}
 @media(prefers-reduced-motion:reduce){.typing-hands,.destination-window{display:none}.operator-working .hacker-foreground,.operator-dot,.binary-curtain:after,.scene-location small:after{animation:none}}
+
+/* Flight labels give way to the room HUD at camera arrival. */
+body:not(.inside) :is(.scene-location, .scene-instructions, .session-status, .operator-caption),
+.arrival.done :is(.arrival-coordinates, .flight-meter) {
+  visibility: hidden;
+}
+.arrival-caption { bottom: max(155px, 16%); }
+.flight-meter { bottom: max(110px, 9%); }
+.icon-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.expand-icon { width: 1em; height: 1em; vertical-align: -.13em; pointer-events: none; }
+.scene-instructions .expand-icon { font-size: 1.35em; }
+.scene-instructions { font-size: clamp(10px, .9vw, 13px); }
+
+/* Keep the complete monitor wall in front of the photographic foreground. */
+.monitor-grid {
+  top: 29%;
+  left: 15%;
+  width: 70%;
+  height: 41%;
+  z-index: 5;
+  gap: 2% 1%;
+}
+.hacker-foreground {
+  translate: 0 20%;
+  mask-image: linear-gradient(black 62%, transparent 83%);
+}
+.monitor-grid .monitor { background-color: #071b1b; }
+.monitor-grid .monitor.revealed { cursor: zoom-in; }
+.monitor .monitor-head, .monitor .monitor-foot { flex: none; }
+.monitor .monitor-head { font-size: clamp(9px, .76cqw, 14px); }
+.monitor .screen-status { font-size: clamp(8px, .55cqw, 11px); }
+.monitor .monitor-foot { font-size: clamp(7px, .48cqw, 10px); }
+.monitor .focus-screen {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 24px;
+  font-size: 15px;
+  border-radius: 3px;
+}
+.focus-screen:enabled:hover, .focus-screen:focus-visible { background: #28443e; outline-offset: -2px; }
+.focus-screen:disabled { opacity: .4; cursor: default; }
+.monitor .large-number strong { font-weight: inherit; }
+.monitor .large-number span { font-size: max(8px, .55cqw); }
+.monitor-grid h2 { font-size: clamp(16px, 1.35cqw, 25px); }
+.monitor-grid .skill-row h3 { font-size: clamp(12px, .94cqw, 18px); }
+.monitor-grid .eyebrow, .monitor-grid .outline-tag { font-size: clamp(7px, .55cqw, 11px); }
+.monitor-grid .screen-content p:not(.eyebrow):not(.full-name), .monitor-grid .full-name {
+  font-size: clamp(11px, .77cqw, 16px);
+}
+.monitor-grid .small-note, .monitor-grid .action, .monitor-grid .email,
+.monitor-grid .contact-actions, .monitor-grid .contact-actions button { font-size: clamp(9px, .66cqw, 14px); }
+.monitor-grid .screen-content a, .monitor-grid .screen-content button { cursor: pointer; }
+
+/* The selected article owns its header and content in the browser's top layer. */
+.monitor-dialog {
+  width: min(800px, calc(100% - 24px));
+  height: min(540px, calc(100dvh - 32px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 1px solid #4b756b;
+  border-radius: 8px;
+  color: var(--ink);
+  background: #081b1b;
+  box-shadow: 0 24px 75px #0008;
+}
+.monitor-dialog::backdrop { background: rgb(2 8 11 / 82%); }
+.monitor-dialog .monitor {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: inherit;
+  box-shadow: none;
+  transform: none;
+  container-type: inline-size;
+}
+.monitor-dialog .focus-screen, .monitor-dialog .binary-curtain,
+.monitor-dialog .monitor::before, .monitor-dialog .monitor::after { display: none; }
+.monitor-dialog .monitor-head, .monitor-dialog .monitor-foot {
+  gap: 10px;
+  padding: 12px clamp(12px, 3vw, 24px);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.monitor-dialog .monitor-foot, .monitor-dialog .screen-status { font-size: 10px; }
+#close-focus {
+  border: 1px solid #63857b;
+  border-radius: 3px;
+  background: transparent;
+  color: #cde9dd;
+  padding: 9px 12px;
+  font: 12px var(--mono);
+}
+.monitor-dialog .monitor .screen-content {
+  padding: clamp(16px, 4vw, 32px) !important;
+  gap: 20px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+.monitor-dialog .eyebrow { font-size: 11px; margin: 0 0 12px; }
+.monitor-dialog h2 { font-size: clamp(26px, 4vw, 44px); margin: 0 0 14px; letter-spacing: -.03em; }
+.monitor-dialog h3 { font-size: 22px; }
+.monitor-dialog .screen-content p:not(.eyebrow):not(.full-name),
+.monitor-dialog .full-name { font-size: 16px; line-height: 1.6; }
+.monitor-dialog .outline-tag { padding: 7px; margin-top: 14px; font-size: 10px; }
+.monitor-dialog .small-note { font-size: 13px; }
+.monitor-dialog .portrait { width: 33%; align-self: stretch; min-height: 150px; }
+.monitor-dialog .portrait > span { font-size: 9px; }
+.monitor-dialog .large-number { font-size: clamp(48px, 9vw, 80px); margin-right: 22px; }
+.monitor-dialog .large-number span { font-size: 12px; margin-top: 6px; }
+.monitor-dialog .skill-row { padding: 12px 0; gap: 12px; }
+.monitor-dialog .skill-row span { font-size: 13px; }
+.monitor-dialog .action { font-size: 15px; padding: 12px 16px; margin: 18px 0 8px; }
+.monitor-dialog .email { font-size: 16px; padding: 12px 0; }
+.monitor-dialog .contact-actions, .monitor-dialog .contact-actions button { font-size: 14px; gap: 14px; }
+.monitor-dialog .contact-actions { margin-top: 20px; }
+.monitor-dialog #copy-status { font-size: 13px; }
+
+/* Reflow the wall in narrow or shallow viewports so no monitor falls outside the room. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1), (max-height: 540px), (min-aspect-ratio: 5/2) {
+  .room { overflow: auto; overscroll-behavior: contain; }
+  .scene-world {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    padding: clamp(100px, 18vw, 160px) 4% 20px;
+    aspect-ratio: auto;
+    transform: none !important;
+    background-size: max(200%, 780px) auto;
+    background-position: right top;
+  }
+  .scene-location { top: 16px; left: 4%; font-size: 10px; }
+  .scene-location p { font-size: 15px; margin: 5px 0; }
+  .scene-location small { font-size: 10px; }
+  .monitor-grid {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+    grid-template-rows: auto;
+    gap: 10px;
+    perspective: none;
+  }
+  .monitor-grid .monitor { transform: none; }
+  .monitor-grid .monitor-head, .monitor-grid .monitor-foot { padding: 6px 10px; gap: 6px; }
+  .monitor-grid .monitor-head { font-size: 12px; }
+  .monitor-grid .screen-status, .monitor-grid .monitor-foot { font-size: 9px; }
+  .monitor-grid .focus-screen { width: 40px; height: 32px; font-size: 19px; }
+  .monitor-grid .monitor .screen-content { padding: 12px !important; overflow: visible; }
+  .monitor-grid .eyebrow, .monitor-grid .outline-tag { font-size: 9px; }
+  .monitor-grid h2 { font-size: 21px; }
+  .monitor-grid .skill-row { padding: 4px 0; gap: 7px; }
+  .monitor-grid .skill-row h3 { font-size: 15px; }
+  .monitor-grid .skill-row span, .monitor-grid .portrait > span { font-size: 9px; }
+  .monitor-grid .large-number { font-size: 40px; margin-right: 12px; }
+  .monitor-grid .large-number span { font-size: 10px; }
+  .monitor-grid .screen-content p:not(.eyebrow):not(.full-name),
+  .monitor-grid .full-name { font-size: 14px; }
+  .monitor-grid .small-note, .monitor-grid .action, .monitor-grid .email,
+  .monitor-grid .contact-actions, .monitor-grid .contact-actions button { font-size: 12px; }
+  .monitor-grid .action { margin-block: 8px; padding: 8px 10px; }
+  .monitor-grid .screen-content { gap: 10px; }
+  .monitor-grid .contact-actions { gap: 8px; margin-top: 8px; }
+  .scene-instructions { position: static; padding: 10px 4% 18px; }
+  .scene-vignette, .hacker-foreground, .typing-hands, .operator-caption { display: none; }
+}
+@media (max-width: 460px) {
+  .monitor-dialog .monitor-head { flex-wrap: wrap; gap: 6px; }
+  .monitor-dialog .monitor-head button { padding-inline: 8px; }
+  .monitor-dialog .monitor .identity-copy { min-width: 0; }
+}
