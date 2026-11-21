@@ -1,6 +1,6 @@
 const screens=[...document.querySelectorAll('[data-screen]')];
 const arrival=document.querySelector('#arrival'),narration=document.querySelector('#narration'),progress=document.querySelector('#progress'),pauseButton=document.querySelector('#pause'),reduce=matchMedia('(prefers-reduced-motion: reduce)');
-const introDuration=16000,stepDuration=4400,decodeDuration=2700,total=introDuration+screens.length*stepDuration;
+const introDuration=16000,stepDuration=4400,total=introDuration+screens.length*stepDuration;
 const labels=['Identity','Education','Toolkit','Ambitions','Blood Bridge','Connection'];
 const skipButton = document.querySelector('#skip');
 const dialog = document.querySelector('#monitor-dialog');
@@ -9,14 +9,14 @@ const grid = document.querySelector('.monitor-grid');
 let expandedScreen = null;
 let screenSlot = null;
 let elapsed=0,previous=0,paused=false,completed=false,lastPaint=0;
-const binary=length=>Array.from({length},(_,i)=>i%32===31?'\n':Math.random()>.5?'1':'0').join('');
+const queries = ['identity', 'education', 'skills', 'ambitions', 'projects', 'contact'];
 screens.forEach(screen=>{
   screen.querySelectorAll('.screen-content h2,.screen-content h3,.screen-content p,.screen-content .small-note,.screen-content .outline-tag,.screen-content a,.screen-content .large-number > strong,.screen-content .large-number > span,.screen-content .skill-row>span').forEach(el=>{
     if(el.querySelector('.decode'))return;
     if(!el.dataset.text)el.dataset.text=el.textContent.trim();
     el.classList.add('decode');
   });
-  const curtain=document.createElement('div');curtain.className='binary-curtain';curtain.setAttribute('aria-hidden','true');curtain.textContent=binary(700);screen.append(curtain);
+  const curtain=document.createElement('div');curtain.className='binary-curtain';curtain.setAttribute('aria-hidden','true');curtain.textContent='Awaiting operator…';screen.append(curtain);
 });
 function decodeScreen(screen,fraction){
   screen.querySelectorAll('.decode').forEach(el=>{
@@ -69,7 +69,7 @@ function finish() {
   window.paintFlight(introDuration);
   setFlightActive(false);
   completed = true;
-  document.body.classList.remove('operator-working','running');
+  document.body.classList.remove('is-typing','operator-working','running');
   document.querySelector('#operator-action').textContent = 'OPERATOR / ARCHIVE RECOVERED';
   screens.forEach(screen => {
     decodeScreen(screen,1);
@@ -87,7 +87,7 @@ function start() {
   completed = false;
   setPause(false);
   setFlightActive(true);
-  document.body.classList.remove('operator-working','motion-still');
+  document.body.classList.remove('is-typing','operator-working','motion-still');
   document.body.classList.add('running');
   arrival.classList.remove('impact');
   document.querySelector('#operator-action').textContent = 'OPERATOR / CONNECTING';
@@ -95,7 +95,8 @@ function start() {
   screens.forEach(screen => {
     screen.classList.remove('active');
     decodeScreen(screen,0);
-    screen.querySelector('.screen-status').textContent = 'ENCRYPTED';
+    screen.querySelector('.screen-status').textContent = 'STANDBY';
+    screen.querySelector('.binary-curtain').textContent = 'Awaiting operator…';
   });
   document.querySelector('.room').scrollTop = 0;
   document.querySelector('#counter').textContent = '00 / 06';
@@ -116,20 +117,24 @@ function render(){
       document.body.classList.add('operator-working');
     }
     const index=Math.min(screens.length-1,Math.floor((elapsed-introDuration)/stepDuration));
+    const age = elapsed-introDuration-index*stepDuration;
+    const command = 'find "Siva Syam" /'+queries[index];
+    const typed = command.slice(0,Math.floor(Math.min(1,age/1450)*command.length));
+    const monitor = String(index+1).padStart(2,'0');
+    document.body.classList.toggle('is-typing',age<1450);
+    document.body.style.setProperty('--operator-turn', ((index%3-1)*3)+'deg');
     screens.forEach((screen,i)=>{
-      const fraction=Math.max(0,Math.min(1,(elapsed-introDuration-i*stepDuration)/decodeDuration));
-      decodeScreen(screen,fraction);screen.classList.toggle('active',i===index);
-      screen.querySelector('.screen-status').textContent=fraction>=1?'DECRYPTED':i===index?'DECODING':'ENCRYPTED';
-      if(fraction<.2)screen.querySelector('.binary-curtain').textContent=binary(700);
+      const fraction = Math.max(0,Math.min(1,(elapsed-introDuration-i*stepDuration-1750)/1800));
+      decodeScreen(screen,fraction);
+      screen.classList.toggle('active',i===index);
+      screen.querySelector('.screen-status').textContent = fraction>=1?'DECRYPTED':i===index?'SEARCHING':'STANDBY';
+      screen.querySelector('.binary-curtain').textContent = i===index
+        ? '$ '+typed+(age<1450?'▏':'\nMatch found · opening record') : 'Awaiting operator…';
     });
-    const currentFraction=Math.min(1,(elapsed-introDuration-index*stepDuration)/decodeDuration);
-    document.querySelector('#operator-action').textContent=currentFraction<1?'OPERATOR / RECOVERING '+labels[index].toUpperCase():'OPERATOR / RECORD VERIFIED';
-    const command='> archive.read("'+labels[index].toLowerCase()+'")';
-    const typing=command.slice(0,Math.floor(currentFraction*command.length));
-    const activeCurtain=screens[index].querySelector('.binary-curtain');
-    if(currentFraction<.2)activeCurtain.textContent=typing+' _\n\n'+binary(650);
-    narration.textContent=currentFraction<1?'Decrypting '+labels[index].toLowerCase()+'... '+Math.floor(currentFraction*100)+'%':labels[index]+' recovered on monitor '+(index+1)+'.';
-    document.querySelector('#terminal-log').textContent='> public_archive / '+labels[index].toLowerCase().replaceAll(' ','_')+' / '+(currentFraction<1?'decoding stream...':'record recovered');
+    const activity = age<1450?'Typing query':age<1750?'Searching archive':'Reading '+labels[index];
+    document.querySelector('#operator-action').textContent = activity+' / '+monitor;
+    document.querySelector('#terminal-log').textContent = '$ '+typed+(age<1450?'▏':'  →  Monitor '+monitor);
+    narration.textContent = 'Monitor '+monitor+' · '+activity+' · Siva Syam';
     document.querySelector('#counter').textContent=String(index+1).padStart(2,'0')+' / 06';
   }
   progress.style.width=String(Math.min(100,elapsed/total*100))+'%';if(elapsed>=total)finish();

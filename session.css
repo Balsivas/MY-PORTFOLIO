@@ -180,3 +180,25 @@ body:not(.inside) :is(.scene-location, .scene-instructions, .session-status, .op
   .monitor-dialog .monitor-head button { padding-inline: 8px; }
   .monitor-dialog .monitor .identity-copy { min-width: 0; }
 }
+
+#arrival .flight-world, #arrival .glass-entry { inset:0; transform-origin:0 0; }
+#arrival :is(.impact-flash,.impact-rings,.lens-glint,.speed-haze,.destination-window) { display:none; }
+.operator-working .hacker-foreground {
+  rotate:var(--operator-turn,0deg); transform-origin:51% 83%; transition:rotate .8s ease;
+}
+.operator-working .typing-hands { opacity:0; }
+.operator-working.is-typing .typing-hands { opacity:.8; }
+.monitor-grid .monitor.active { border-color:#9ae9cf; box-shadow:0 0 24px #80f2c752; }
+.monitor-grid .binary-curtain {
+  display:grid; align-content:center; justify-items:start;
+  padding:8%; font:clamp(10px,.85cqw,16px)/1.65 var(--mono);
+  letter-spacing:.025em; white-space:pre-wrap; overflow-wrap:anywhere; background:#071819;
+}
+.monitor-grid .monitor:not(.active) .binary-curtain { color:#728c85; }
+.scene-location small { display:block; color:#b8e5cc; font:clamp(10px,.9vw,15px)/1.5 var(--mono); }
+.scene-location small::after { content:none; }
+@media(max-width:900px),(max-aspect-ratio:1/1),(max-height:540px),(min-aspect-ratio:5/2) {
+  .scene-world { padding-top:clamp(210px,56vw,390px); background-size:200% auto; }
+  .scene-location { background:#071317d9; padding:8px 10px; }
+}
+

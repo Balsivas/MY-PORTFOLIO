@@ -1,61 +1,46 @@
-/* One camera clock keeps the skyline, window and room in the same shot. */
+/* Project two stationary planes from a single moving viewpoint.
+   Distances are in focal lengths. The selected office anchors both planes. */
 (() => {
-  const stage=document.querySelector('#arrival');
-  const world=stage.querySelector('.flight-world');
-  const facade=stage.querySelector('.glass-entry');
-  const room=document.querySelector('.scene-world');
-  const opening=facade.querySelector('.window-interior');
-  const near=stage.querySelector('.cloud-near');
-  const far=stage.querySelector('.cloud-far');
-  const reflection=stage.querySelector('.glass-reflection');
-  const flash=stage.querySelector('.impact-flash');
-  const rings=stage.querySelector('.impact-rings');
-  const glint=stage.querySelector('.lens-glint');
-  const haze=stage.querySelector('.speed-haze');
-  const meter=stage.querySelector('.flight-meter i');
-  const caption=stage.querySelector('.arrival-caption');
-  const coordinates=stage.querySelector('.arrival-coordinates');
-  const destination=stage.querySelector('.destination-window');
-  let width=innerWidth,height=innerHeight;
-  addEventListener('resize',()=>{width=innerWidth;height=innerHeight;},{passive:true});
-  const clamp=x=>Math.max(0,Math.min(1,x));
-  const smooth=x=>{x=clamp(x);return x*x*x*(x*(x*6-15)+10);};
-  const mix=(a,b,t)=>a+(b-a)*t;
-  const segment=(t,a,b)=>smooth((t-a)/(b-a));
-  const geometric=(a,b,t)=>a*Math.pow(b/a,t);
-  window.paintFlight=(milliseconds)=>{
-    const t=clamp(milliseconds/16000);
-    // Keep the establishing image below 3x; replace it with vector architecture.
-    const advance=segment(t,.08,.65);
-    const skyScale=geometric(1.015,2.8,advance);
-    const track=segment(t,.12,.64);
-    world.style.transform=`translate3d(${-28*track}%,${-14*track}%,0) scale(${skyScale})`;
-    // Once the facade fills the viewport, remove the sky behind its opening.
-    world.style.opacity=String(1-segment(t,.59,.67));
-    const approach=segment(t,.29,.89);
-    const scale=geometric(.085,18,approach);
-    const cx=mix(.78,.5,track),cy=mix(.64,.5,track);
-    if(destination)destination.style.opacity=String(segment(t,.06,.15)*(1-segment(t,.26,.39)));
-    const x=(cx-.58333*scale)*width,y=(cy-.58333*scale)*height;
-    facade.style.transform=`translate3d(${x}px,${y}px,0) scale(${scale})`;
-    facade.style.opacity=String(segment(t,.30,.46));
-    // The glass reflection thins out while the near sill and jambs move past.
-    opening.style.opacity=String(1-segment(t,.60,.77));
-    const entry=segment(t,.64,.98);
-    room.style.transform=`translate(-50%,-50%) translateX(${mix(2.8,0,entry)}%) scale(${mix(.94,1,entry)})`;
-    reflection.style.opacity=String(mix(.8,.1,segment(t,.63,.86)));
-    near.style.transform=`translate3d(${mix(4,-24,advance)}%,${mix(-14,47,advance)}%,0) scale(${mix(.85,1.9,advance)})`;
-    near.style.opacity=String((.12+.35*Math.sin(Math.PI*clamp(t/.6)))*(1-segment(t,.38,.64)));
-    far.style.transform=`translate3d(${mix(-5,15,advance)}%,${mix(-6,35,advance)}%,0) scale(${mix(.9,1.5,advance)})`;
-    far.style.opacity=String(.24*(1-segment(t,.30,.62)));
-    const contact=Math.exp(-Math.pow((t-.807)/.006,2));
-    flash.style.opacity=String(contact*.075);
-    rings.style.opacity=String(contact*.3);
-    glint.style.opacity=String(Math.sin(Math.PI*segment(t,.58,.84))*.17);
-    haze.style.opacity=String(Math.sin(Math.PI*segment(t,.42,.90))*.25);
-    meter.style.transform=`scaleX(${t})`;
-    caption.style.opacity=String(1-segment(t,.57,.69));
-    coordinates.style.opacity=String(.7*(1-segment(t,.48,.60)));
+  const stage = document.querySelector('#arrival');
+  const find = name => stage.querySelector('.' + name);
+  const skyline = find('flight-world'), wall = find('glass-entry');
+  const glass = find('window-interior'), reflection = find('glass-reflection');
+  const near = find('cloud-near'), far = find('cloud-far');
+  const caption = find('arrival-caption'), coords = find('arrival-coordinates');
+  const meter = find('flight-meter i'), office = document.querySelector('.scene-world');
+  const clamp = x => Math.max(0,Math.min(1,x));
+  const ease = (x,a,b) => { const u = clamp((x-a)/(b-a)); return u*u*(3-2*u); };
+
+  function project(element, size, depth, anchorX, anchorY, camera) {
+    const scale = size / Math.max(.015,depth-camera.z);
+    const x = (.5 + (2.24-camera.x)/Math.max(.015,depth-camera.z) - anchorX*scale)*innerWidth;
+    const y = (.5 + (1.12-camera.y)/Math.max(.015,depth-camera.z) - anchorY*scale)*innerHeight;
+    element.style.transform = 'translate3d('+x+'px,'+y+'px,0) scale('+scale+')';
+    return scale;
+  }
+  window.paintFlight = ms => {
+    const t = clamp(ms/16000), path = ease(t,0,.89);
+    const remaining = 8*Math.pow(.018/8,path);
+    const camera = {z:8-remaining+.5*ease(t,.78,1)};
+    // Arc toward the tower while keeping its office within the frame.
+    camera.x = 2.24 - remaining*(.28*(1-ease(t,0,.58)) + .06*Math.sin(Math.PI*ease(t,0,.65)));
+    camera.y = 1.12 - remaining*.14*(1-ease(t,0,.62));
+    project(skyline,8,8.03,.78,.64,camera);
+    const coverage = project(wall,.78,8,.583,.582,camera);
+    // Introduce architectural detail only after the building fills the shot.
+    wall.style.opacity = camera.z >= 8 ? 0 : ease(coverage,1.65,2.25);
+    skyline.style.opacity = 1-ease(coverage,2.25,3.2);
+    glass.style.opacity = 1-ease(coverage,2.2,5.8);
+    reflection.style.opacity = .55*(1-ease(coverage,2,5));
+    const inside = ease(t,.51,1);
+    office.style.transform = 'translate(-50%,-50%) translateX('+(-2.6*(1-inside))+'%) scale('+(.84+.16*inside)+')';
+    near.style.transform = 'translate3d('+(-34*path)+'%,'+(50*path)+'%,0) scale('+(1+path)+')';
+    far.style.transform = 'translate3d('+(13*path)+'%,'+(22*path)+'%,0)';
+    near.style.opacity = .28*(1-ease(t,.08,.42));
+    far.style.opacity = .19*(1-ease(t,.08,.47));
+    caption.style.opacity = 1-ease(t,.32,.5);
+    coords.style.opacity = .7*(1-ease(t,.25,.45));
+    meter.style.transform = 'scaleX('+t+')';
   };
   window.paintFlight(0);
 })();
